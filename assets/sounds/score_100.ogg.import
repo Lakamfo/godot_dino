@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/score_100.ogg-c699d230b2d46215454e2b119abfe33a.oggstr"
+
+[deps]
+
+source_file="res://assets/sounds/score_100.ogg"
+dest_files=[ "res://.import/score_100.ogg-c699d230b2d46215454e2b119abfe33a.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

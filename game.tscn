@@ -1,0 +1,155 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://assets/sprites/sprite.png" type="Texture" id=1]
+[ext_resource path="res://scenes/dino.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scripts/ground_scroll.gd" type="Script" id=3]
+[ext_resource path="res://scripts/ui_canvas.gd" type="Script" id=4]
+[ext_resource path="res://scripts/spawner.gd" type="Script" id=5]
+[ext_resource path="res://font/GorgeousPixel.ttf" type="DynamicFontData" id=6]
+
+[sub_resource type="AtlasTexture" id=1]
+flags = 9
+atlas = ExtResource( 1 )
+region = Rect2( 2, 100, 2403, 35 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 512, 1.5 )
+
+[sub_resource type="DynamicFont" id=3]
+use_mipmaps = true
+font_data = ExtResource( 6 )
+
+[sub_resource type="AtlasTexture" id=4]
+flags = 9
+atlas = ExtResource( 1 )
+region = Rect2( 952.008, 29, 383, 22 )
+
+[sub_resource type="InputEventAction" id=6]
+action = "ui_accept"
+
+[sub_resource type="ShortCut" id=7]
+shortcut = SubResource( 6 )
+
+[sub_resource type="AtlasTexture" id=5]
+flags = 9
+atlas = ExtResource( 1 )
+region = Rect2( 2, 2, 72, 64 )
+
+[node name="game" type="Node2D"]
+
+[node name="camera" type="Camera2D" parent="."]
+offset = Vector2( 512, 300 )
+current = true
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="bg" type="ColorRect" parent="."]
+margin_right = 4803.0
+margin_bottom = 601.0
+
+[node name="ground_static" type="StaticBody2D" parent="."]
+script = ExtResource( 3 )
+
+[node name="ground_1" type="Sprite" parent="ground_static"]
+position = Vector2( 1201, 583 )
+texture = SubResource( 1 )
+
+[node name="ground_2" type="Sprite" parent="ground_static"]
+position = Vector2( 3601, 583 )
+texture = SubResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ground_static"]
+position = Vector2( 512, 599.5 )
+shape = SubResource( 2 )
+
+[node name="dino" parent="." instance=ExtResource( 2 )]
+position = Vector2( 80, 550 )
+
+[node name="ui_canvas" type="CanvasLayer" parent="."]
+script = ExtResource( 4 )
+
+[node name="scores" type="HBoxContainer" parent="ui_canvas"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -220.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = 48.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 2
+
+[node name="hi" type="Label" parent="ui_canvas/scores"]
+margin_left = 63.0
+margin_top = 10.0
+margin_right = 121.0
+margin_bottom = 29.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 3 )
+text = "HI: 0000"
+align = 1
+valign = 1
+
+[node name="score" type="Label" parent="ui_canvas/scores"]
+margin_left = 125.0
+margin_top = 10.0
+margin_right = 212.0
+margin_bottom = 29.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 3 )
+text = "SCORE: 0000"
+align = 1
+valign = 1
+
+[node name="dead_screen" type="Control" parent="ui_canvas"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="game_over" type="TextureRect" parent="ui_canvas/dead_screen"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -191.5
+margin_top = -132.0
+margin_right = 191.5
+margin_bottom = -92.0
+texture = SubResource( 4 )
+
+[node name="restart_button" type="TextureButton" parent="ui_canvas/dead_screen"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -36.0
+margin_top = -32.0
+margin_right = 36.0
+margin_bottom = 32.0
+disabled = true
+shortcut = SubResource( 7 )
+texture_normal = SubResource( 5 )
+texture_pressed = SubResource( 5 )
+texture_hover = SubResource( 5 )
+texture_disabled = SubResource( 5 )
+texture_focused = SubResource( 5 )
+
+[node name="spawner" type="Position2D" parent="."]
+position = Vector2( 1224, 590 )
+script = ExtResource( 5 )
+
+[node name="cactus_pos" type="Position2D" parent="spawner"]
+
+[node name="ptero_pos" type="Position2D" parent="spawner"]
+position = Vector2( 0, -150 )
+
+[node name="cactus_timer" type="Timer" parent="spawner"]
+one_shot = true
+
+[node name="ptero_timer" type="Timer" parent="spawner"]
+one_shot = true
+
+[connection signal="button_down" from="ui_canvas/dead_screen/restart_button" to="ui_canvas" method="restart_down"]
+[connection signal="timeout" from="spawner/cactus_timer" to="spawner" method="spawn_timer_timeout"]
+[connection signal="timeout" from="spawner/ptero_timer" to="spawner" method="ptero_timer_timeout"]
