@@ -1,2 +1,2 @@
 # godot_dino
-Google Dinosaur Game clone in Godot Engine
+Google Dinosaur game clone in Godot Engine
